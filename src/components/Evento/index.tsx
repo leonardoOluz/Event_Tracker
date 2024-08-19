@@ -10,11 +10,6 @@ const Evento: React.FC<{ evento: IEvento }> = ({ evento }) => {
     style.Evento
   ]
 
-  /* Criar hooks para deletar evento */
-  const excluirEvento = () => {
-    eventoDeletado(evento);
-  }
-
   if (evento.completo) {
     estilos.push(style.completo)
   }
@@ -25,7 +20,7 @@ const Evento: React.FC<{ evento: IEvento }> = ({ evento }) => {
     <div className="cards-info">
       <h3 className={style.descricao}>{evento.descricao} - {evento.inicio.toLocaleDateString()}</h3>
     </div>
-    <i className="far fa-times-circle fa-2x" onClick={excluirEvento}></i>
+    <i className="far fa-times-circle fa-2x" onClick={() => eventoDeletado(evento)}></i>
   </div>)
 }
 
