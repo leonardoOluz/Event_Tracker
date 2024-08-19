@@ -14,7 +14,7 @@ const EventoCheckbox: React.FC<{ evento: IEvento }> = ({ evento }) => {
   ]
 
   const aoAlterarStatus = (): void => {
-    let eventoAlterado = {
+    let eventoAlterado:IEvento = {
       ...evento
     };
     

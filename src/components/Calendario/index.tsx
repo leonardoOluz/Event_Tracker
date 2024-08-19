@@ -2,10 +2,11 @@
 import React from 'react'
 import style from './Calendario.module.scss';
 import ptBR from './localizacao/ptBR.json'
-import Kalend, { CalendarView } from 'kalend'
+import Kalend, { CalendarEvent, CalendarView, OnEventDragFinish } from 'kalend'
 import 'kalend/dist/styles/index.css';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { listaDeEventosState } from '../../state/atom';
+import { IEvento } from '../../interfaces/IEvento';
 
 interface IKalendEvento {
   id?: number
@@ -19,6 +20,8 @@ const Calendario: React.FC = () => {
 
   const eventosKalend = new Map<string, IKalendEvento[]>();
   const eventos = useRecoilValue(listaDeEventosState)
+  const setListaeventos = useSetRecoilState<IEvento[]>(listaDeEventosState);
+
   eventos.forEach(evento => {
     const chave = evento.inicio.toISOString().slice(0, 10)
     if (!eventosKalend.has(chave)) {
@@ -32,6 +35,27 @@ const Calendario: React.FC = () => {
       color: 'blue'
     })
   })
+
+  const onEventDragFinish: OnEventDragFinish = (
+    kalendEventInalterado: CalendarEvent,
+    kalendventAtualizado: CalendarEvent
+  ) => {
+    const evento = eventos.find(evento => evento.descricao === kalendventAtualizado.summary)
+    if (evento) {
+      const eventoAtualizado: IEvento = {
+        ...evento
+      }
+      eventoAtualizado.inicio = new Date(kalendventAtualizado.startAt);
+      eventoAtualizado.fim = new Date(kalendventAtualizado.endAt);
+
+      setListaeventos(listaAntiga => {
+        const indice = listaAntiga.findIndex(evt => evt.id === eventoAtualizado.id)
+        return [...listaAntiga.slice(0, indice), eventoAtualizado, ...listaAntiga.slice(indice + 1)]
+      })
+
+    }
+  }
+
   return (
     <div className={style.Container}>
       <Kalend
@@ -44,6 +68,7 @@ const Calendario: React.FC = () => {
         calendarIDsHidden={['work']}
         language={'customLanguage'}
         customLanguage={ptBR}
+        onEventDragFinish={onEventDragFinish}
       />
     </div>
   );
