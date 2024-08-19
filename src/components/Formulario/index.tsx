@@ -4,12 +4,12 @@ import { IEvento } from '../../interfaces/IEvento';
 import useAdicionarEvento from '../../state/hooks/useAdicionarEvento';
 
 const Formulario: React.FC = () => {
-  const [descricao, setDescricao] = useState('')
-  const [dataInicio, setDataInicio] = useState('')
-  const [horaInicio, setHoraInicio] = useState('')
-  const [dataFim, setDataFim] = useState('')
-  const [horaFim, setHoraFim] = useState('')
-  const adicionarEvento = useAdicionarEvento()
+  const [descricao, setDescricao] = useState('');
+  const [dataInicio, setDataInicio] = useState('');
+  const [horaInicio, setHoraInicio] = useState('');
+  const [dataFim, setDataFim] = useState('');
+  const [horaFim, setHoraFim] = useState('');
+  const adicionarEvento = useAdicionarEvento();
 
   const montarData = (data: string, hora: string) => {
     const dataString = data.slice(0, 10)
